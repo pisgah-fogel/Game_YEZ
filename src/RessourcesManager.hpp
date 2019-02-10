@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Log.hpp"
 
 /*! \namespace core
  * 
@@ -66,13 +67,13 @@ namespace core
 		RessourcesManager()
 		{
 			#ifdef DEBUG
-			std::cout<<"[d] RessourcesManager::RessourcesManager Create Ressource Manager"<<std::endl;
+			LOG("Debug Create Ressource Manager");
 			#endif // DEBUG
 		}
 		~RessourcesManager()
 		{
 			#ifdef DEBUG
-			std::cout<<"[d] RessourcesManager::~RessourcesManager Free Ressource Manager"<<std::endl;
+			LOG("Debug Create Free Ressource Manager");
 			#endif // DEBUG
 		}
 	};

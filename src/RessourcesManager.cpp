@@ -1,4 +1,5 @@
 #include "RessourcesManager.hpp"
+#include "Log.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -6,9 +7,9 @@
 bool core::RessourcesManager::loadDefaultFont()
 {
 	if (!u_font.loadFromFile("data/Roboto-Bold.ttf")) {
-			std::cout<<"[x] RessourcesManager::loadDefaultFont Can't load font"<<std::endl;
+			LOG("Error Can't load font");
 		return false;
 	}
-	std::cout<<"[v] RessourcesManager::loadDefaultFont Font loaded"<<std::endl;
+	LOG("Ok font loaded");
 	return true;
 }
