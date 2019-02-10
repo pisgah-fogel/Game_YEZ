@@ -1,8 +1,13 @@
 #include <SFML/Graphics.hpp>
+#include "RessourcesManager.hpp"
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	core::RessourcesManager::getInstance()->loadDefaultFont();
+	sf::Text text;
+	text.setFont(*core::RessourcesManager::getInstance()->getDefaultFont());
+	text.setString("Hello world");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
@@ -17,6 +22,7 @@ int main()
 
         window.clear();
         window.draw(shape);
+		window.draw(text);
         window.display();
     }
 
