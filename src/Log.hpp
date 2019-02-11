@@ -19,7 +19,8 @@
 
 /*! \namespace utils
  * 
- * Regroupe les utilitaires
+ * Regroupe les utilitaires, ils ne sont pas specifiques à l'application
+ * et peuvent être réutilisés
  */
 namespace utils
 {

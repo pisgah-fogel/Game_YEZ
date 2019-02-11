@@ -1,7 +1,6 @@
 #include "RessourcesManager.hpp"
 #include "Log.hpp"
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
 bool core::RessourcesManager::loadDefaultFont()

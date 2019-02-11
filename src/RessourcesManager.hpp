@@ -12,7 +12,6 @@
  * \version 0.1
  */
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Log.hpp"
 
