@@ -1,12 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include "RessourcesManager.hpp"
 #include "Log.hpp"
+#include "Config.hpp"
 
 int main()
 {
-	LOG("Test ceci est un test");
-	LOG("Error, ceci est une erreur");
-	LOG("Ok, test reussit");
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	core::RessourcesManager::getInstance()->loadDefaultFont();
 	sf::Text text;

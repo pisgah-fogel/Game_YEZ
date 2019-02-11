@@ -1,0 +1,5 @@
+string a = /test/test
+int b = 0b0110
+int c = 0xdead
+int d_test = 12349
+float e = 8965.8E-2

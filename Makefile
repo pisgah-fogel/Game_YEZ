@@ -11,7 +11,7 @@ CMAKE_COMMAND = /usr/bin/cmake
 ARGS = -DDEBUG -Wall -g
 OPT = 
 
-all: main.o RessourcesManager.o Log.o
+all: main.o RessourcesManager.o Log.o Config.o
 	g++ $(OPT) build/*.o -lsfml-graphics -lsfml-window -lsfml-system -o YEZ
 
 main.o:
@@ -23,6 +23,9 @@ RessourcesManager.o:
 
 Log.o:
 	g++ $(ARGS) -c src/Log.cpp -o build/Log.o
+
+Config.o:
+	g++ $(ARGS) -c src/Config.cpp -o build/Config.o
 
 clean:
 	rm -r build
