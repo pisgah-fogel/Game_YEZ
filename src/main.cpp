@@ -17,13 +17,11 @@ int main()
 
 	sf::Texture texture;
 	std::string path = utils::Config::getInstance()->getString("tileset");
-	if (!texture.loadFromFile(path))
-	{
-		LOG("Error can't load texture");
-	}
+	core::RessourcesManager::getInstance()->loadTexture(path,0);
+	sf::Texture *tex = core::RessourcesManager::getInstance()->getTexture(0);
 	texture.setSmooth(true);
 	sf::Sprite sprite;
-	sprite.setTexture(texture);
+	sprite.setTexture(*tex);
 	sprite.setTextureRect(sf::IntRect(0, 0, 16, 16));
 	sprite.setPosition(sf::Vector2f(10.f, 50.f));
 	sprite.move(sf::Vector2f(5.f, 10.f));

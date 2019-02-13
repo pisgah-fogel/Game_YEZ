@@ -67,38 +67,24 @@ namespace core
 		 *
 		 * \return False en cas d'erreur, true sinon
 		 */
-		bool loadTexture(const std::string& filename, unsigned int texName)
+		bool loadTexture(const std::string& filename, const std::string& texName)
 		{
 			if (u_textures.count(texName) != 0) {
-				LOG("Warning Texture %d is already loaded", texName);
+				LOG("Warning Texture %s is already loaded", texName.c_str());
 				return false;
 			}
-			sf::Texture* tex = new sf::Texture();
-			if (!tex->loadFromFile(filename)) {
+			sf::Texture tex;
+			if (!tex.loadFromFile(filename)) {
 				LOG("Error can't import texture file %s", filename.c_str());
-				delete(tex);
 				return false;
 			}
-			LOG("Ok Texture %d loaded", texName);
-			tex->setSmooth(true);
+			tex.setSmooth(true);
 			u_textures[texName] = tex;
-			return true;
-		}
-		bool isTextureLoaded(unsigned int texName)
-		{
-			return u_textures.count(texName) != 0;
-		}
-		sf::Texture* getTexture(unsigned int texName)
-		{
-			if (isTextureLoaded(texName))
-				return u_textures[texName];
-			LOG("Error try to get non-existing texture %d", texName);
-			return nullptr;
 		}
 	private:
 		sf::Font u_font; /*!< Font par default */
-		std::map<unsigned int, sf::Texture*> u_textures; /*!< Textures charges */
-		std::map<unsigned int, sf::IntRect> u_rects; /*!< Textuers rects*/
+		std::map<std::string, sf::Texture> u_textures; /*!< Textures charges */
+		std::map<unsigned int, sf::Rect> u_rects; /*!< Textuers rects*/
 		RessourcesManager()
 		{
 			#ifdef DEBUG
@@ -110,11 +96,6 @@ namespace core
 			#ifdef DEBUG
 			LOG("Debug Create Free Ressource Manager");
 			#endif // DEBUG
-			std::map<unsigned int, sf::Texture*>::iterator it;
-			for(it=u_textures.begin(); it!=u_textures.end(); it++) {
-				delete(it->second);
-				LOG("Ok free texture %d", it->first);
-			}
 		}
 	};
 }
