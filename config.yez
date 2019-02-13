@@ -1,1 +1,5 @@
 string default_font = data/Roboto-Bold.ttf
+string tileset = data/basictiles.png
+string livingchar = data/characters.png # living character
+string deadchar = data/dead.png
+string things = data/things.png
