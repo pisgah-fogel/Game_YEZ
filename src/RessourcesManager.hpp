@@ -95,10 +95,12 @@ namespace core
 			LOG("Error try to get non-existing texture %d", texName);
 			return nullptr;
 		}
+	bool parseFile(const std::string& filename);
 	private:
 		sf::Font u_font; /*!< Font par default */
 		std::map<unsigned int, sf::Texture*> u_textures; /*!< Textures charges */
-		std::map<unsigned int, sf::IntRect> u_rects; /*!< Textuers rects*/
+		std::map<unsigned int, sf::IntRect> u_rects; /*!< Textures rects*/
+		std::map<unsigned int, std::vector<sf::IntRect>> u_rects; /*!< Anim (texturesets) rects*/
 		RessourcesManager()
 		{
 			#ifdef DEBUG

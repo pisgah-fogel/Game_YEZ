@@ -5,6 +5,7 @@
 
 int main()
 {
+	core::RessourcesManager::getInstance()->parseFile("test.conf");
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	core::RessourcesManager::getInstance()->loadDefaultFont();
 
