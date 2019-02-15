@@ -27,7 +27,7 @@ int main()
 	sprite.setPosition(sf::Vector2f(10.f, 50.f));
 	sprite.move(sf::Vector2f(5.f, 10.f));
 	sprite.setOrigin(sf::Vector2f(25.f, 25.f));
-	sf::Vector2f position = sprite.getPosition();
+	//sf::Vector2f position = sprite.getPosition();
 
     while (window.isOpen())
     {

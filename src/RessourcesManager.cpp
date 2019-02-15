@@ -40,81 +40,87 @@ bool core::RessourcesManager::parseFile(const std::string& filename)
 	unsigned int size;
 	unsigned int current_file;
 	unsigned int current_texset;
+    size_t count_ts=0;
 	bool ts_set = false; // current_texset is set
 	bool file_set = false; // current_file is set
-
+	std::vector<sf::IntRect> current_ts_vec;
+    
+    LOG("Start parsing %s", filename.c_str());
 	while (ifs.good()) {
-		std::getline(ifs, a, ' ');
+        a.clear();
+		ifs>>a;
 		if (a == "f") {
-			ts_set = false;
+            if(ts_set) {
+                LOG("Error please finish the texture set before opening an other file");
+                return false;
+            }
 			file_set = true;
-			std::getline(ifs, b, ' ');
-			current_file = std::stoi(b);
-			std::getline(ifs, b);
-			LOG("Debug id: %d",id);
-			LOG("Debug filename: \"%s\"", b.c_str());
+			ifs>>current_file;
+			ifs>>b;
+			LOG("Filename: \"%s\", id: %d", b.c_str(), id);
 			loadTexture(b, current_file);
 		} else if (a == "t") {
-			ts_set = false;
+			if(ts_set) {
+                LOG("Error please finish the texture set");
+                return false;
+            }
 			if (!file_set) {
 				LOG("Error %s, line %s, no file loaded", filename.c_str(), i+1);
-				continue;
+				return false;
 			}
-
-			std::getline(ifs, b, ' ');
-			id = std::stoi(b);
-
-			std::getline(ifs, b, ' ');
-			x = std::stoi(b);
-
-			std::getline(ifs, b, ' ');
-			y = std::stoi(b);
-
-			std::getline(ifs, b, ' ');
-			w = std::stoi(b);
-
-			std::getline(ifs, b);
-			h = std::stoi(b);
-			LOG("Texture %d, %d-%d-%d-%d", id, x, y, w, h);
+			ifs>>id;
+			ifs>>x;
+			ifs>>y;
+			ifs>>w;
+			ifs>>h;
+			LOG("\tTexture %d, %d-%d-%d-%d", id, x, y, w, h);
 			u_rects[current_file*100 + id] = sf::IntRect(x, y, w, h);
-			
 		} else if (a == "ts") {
+            if(ts_set) {
+                LOG("Error please complite the texture set before creating an other one");
+                return false;
+            }
 			if (!file_set) {
-				LOG("Error %s, line %s, no file loaded", filename.c_str(), i+1);
-				continue;
+				LOG("Error %s, line %d, no file loaded", filename.c_str(), i+1);
+				return false;
 			}
-
 			ts_set = true;
-			std::getline(ifs, b, ' ');
-			current_texset = std::stoi(b);
-
-			std::getline(ifs, b);
-			size = std::stoi(b);
-			LOG("TextureSet, id %d size %d", id, size);
+			ifs>>current_texset;
+            ifs>>size;
+            current_ts_vec.clear();
+            count_ts=0;
+			LOG("\tTextureSet, id %d size %d", id, size);
 		} else if (a == "s") {
 			if (!ts_set) {
-				LOG("Error %s, line %s, no previous texture set", filename.c_str(), i+1);
-				continue;
+				LOG("Error %s, line %d, no previous texture set", filename.c_str(), i+1);
+				return false;
 			}
-
-			std::getline(ifs, b, ' ');
-			x = std::stoi(b);
-
-			std::getline(ifs, b, ' ');
-			y = std::stoi(b);
-
-			std::getline(ifs, b, ' ');
-			w = std::stoi(b);
-
-			std::getline(ifs, b);
-			h = std::stoi(b);
-			LOG("Anim %d-%d-%d-%d", x, y, w, h);
+			ifs>>x;
+            ifs>>y;
+			ifs>>w;
+			ifs>>h;
+            count_ts++;
+            LOG("\t\tAnim %d-%d-%d-%d", x, y, w, h);
+            if(count_ts>size) {
+                LOG("Error too many coordinates for texture set");
+                return false;
+            }
+            else if(count_ts==size) {
+                u_anims[current_file*100 + current_texset] = current_ts_vec;
+                ts_set = false;
+                count_ts = 0;
+                LOG("\tAnim %d registered", current_texset);
+            }
+            else {
+                current_ts_vec.push_back(sf::IntRect(x, y, w, h));
+            }
 		} else {
-			LOG("Error unreconnised command %s", a.c_str());
+			LOG("\tWarning ignoring command \"%s\" line %d", a.c_str(), i);
 		}
 		i++;
 	}
 	LOG("Ok read %d lines from %s", i, filename.c_str());
 
 	ifs.close();
+    return true; // everythings works
 }

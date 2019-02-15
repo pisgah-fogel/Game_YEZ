@@ -100,7 +100,7 @@ namespace core
 		sf::Font u_font; /*!< Font par default */
 		std::map<unsigned int, sf::Texture*> u_textures; /*!< Textures charges */
 		std::map<unsigned int, sf::IntRect> u_rects; /*!< Textures rects*/
-		std::map<unsigned int, std::vector<sf::IntRect>> u_rects; /*!< Anim (texturesets) rects*/
+		std::map<unsigned int, std::vector<sf::IntRect>> u_anims; /*!< Anim (texturesets) rects*/
 		RessourcesManager()
 		{
 			#ifdef DEBUG
