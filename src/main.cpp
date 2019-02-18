@@ -2,10 +2,11 @@
 #include "RessourcesManager.hpp"
 #include "Log.hpp"
 #include "Config.hpp"
+#include "AnimSprite.hpp"
 
 int main()
 {
-	//core::RessourcesManager::getInstance()->parseFile("test.conf");
+	core::RessourcesManager::getInstance()->parseFile("test.conf");
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	core::RessourcesManager::getInstance()->loadDefaultFont();
 
@@ -22,6 +23,8 @@ int main()
 	sf::Sprite* sprite = core::RessourcesManager::getInstance()->createSprite(1);
 	sf::Sprite* sprite2 = core::RessourcesManager::getInstance()->createSprite(0);
 	sf::Sprite* sprite3 = core::RessourcesManager::getInstance()->createSprite(2);
+
+	AnimSprite testAnim(3);
 	sprite->setPosition(sf::Vector2f(10.f, 50.f));
 	sprite2->setPosition(sf::Vector2f(60.f, 50.f));
 	sprite3->setPosition(sf::Vector2f(120.f, 50.f));
@@ -36,6 +39,8 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+			else if (event.type == sf::Event::MouseButtonPressed)
+				testAnim.next();
         }
 
         window.clear();
@@ -44,6 +49,7 @@ int main()
 		window.draw(*sprite);
 		window.draw(*sprite2);
 		window.draw(*sprite3);
+		window.draw(testAnim);
         window.display();
     }
 
