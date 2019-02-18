@@ -3,55 +3,11 @@
 #include "Log.hpp"
 #include "Config.hpp"
 #include "AnimSprite.hpp"
+#include "ScreenManager.hpp"
 
 int main()
 {
-	core::RessourcesManager::getInstance()->parseFile("test.conf");
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	core::RessourcesManager::getInstance()->loadDefaultFont();
+	gui::ScreenManager screenM;
 
-	sf::Text text;
-	text.setFont(*core::RessourcesManager::getInstance()->getDefaultFont());
-	text.setString("Hello world");
-
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-	//std::string path = utils::Config::getInstance()->getString("tileset");
-	//core::RessourcesManager::getInstance()->loadTexture(path,0);
-	//sf::Texture *tex = core::RessourcesManager::getInstance()->getTexture(0);
-	sf::Sprite* sprite = core::RessourcesManager::getInstance()->createSprite(1);
-	sf::Sprite* sprite2 = core::RessourcesManager::getInstance()->createSprite(0);
-	sf::Sprite* sprite3 = core::RessourcesManager::getInstance()->createSprite(2);
-
-	AnimSprite testAnim(3);
-	sprite->setPosition(sf::Vector2f(10.f, 50.f));
-	sprite2->setPosition(sf::Vector2f(60.f, 50.f));
-	sprite3->setPosition(sf::Vector2f(120.f, 50.f));
-	//sprite->move(sf::Vector2f(5.f, 10.f));
-	//sprite->setOrigin(sf::Vector2f(25.f, 25.f));
-	//sf::Vector2f position = sprite.getPosition();
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-			else if (event.type == sf::Event::MouseButtonPressed)
-				testAnim.next();
-        }
-
-        window.clear();
-        window.draw(shape);
-		window.draw(text);
-		window.draw(*sprite);
-		window.draw(*sprite2);
-		window.draw(*sprite3);
-		window.draw(testAnim);
-        window.display();
-    }
-
-    return 0;
+    return screenM.mainLoop();
 }
