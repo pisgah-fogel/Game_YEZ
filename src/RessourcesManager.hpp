@@ -84,10 +84,23 @@ namespace core
 			u_textures[texName] = tex;
 			return true;
 		}
+		/*!
+		 * \param texName id de la texture
+		 * \return True si la texture est chargée, False sinon
+		 */
 		bool isTextureLoaded(unsigned int texName)
 		{
 			return u_textures.count(texName) != 0;
 		}
+		/*!
+		 * \brief Accès à une texture chargée
+		 *
+		 * \param texName id de la texture
+		 *
+		 * \return un pointeur vers la texture, nullptr si la texture est
+		 * introuvable (non chargée), le pointeur reste valable pendant tout
+		 * l'execution du programme
+		 */
 		sf::Texture* getTexture(unsigned int texName)
 		{
 			if (isTextureLoaded(texName))
@@ -95,12 +108,73 @@ namespace core
 			LOG("Error try to get non-existing texture %d", texName);
 			return nullptr;
 		}
+		/*!
+		 * \brief Accès à un rectangle de texture chargé
+		 *
+		 * \param id du rect (id_texture*100 + id_propre)
+		 *
+		 * \return un pointeur vers le rect, nullptr si
+		 * introuvable (non chargée), le pointeur reste valable pendant tout
+		 * l'execution du programme
+		 */
+		sf::IntRect* getRect(unsigned int id)
+		{
+			if (u_rects.count(id)>0) {
+				return &u_rects[id];
+			}
+			LOG("Error try to get non-existing rect %d", id);
+			return nullptr;
+		}
+		/*!
+		 * \brief Accès à un ensemble de rectangles de texture chargé
+		 *
+		 * \param id du rect (id_texture*100 + id_propre)
+		 *
+		 * \return un pointeur vers l'ensemble, nullptr si
+		 * introuvable (non chargée), le pointeur reste valable pendant tout
+		 * l'execution du programme
+		 */
+		std::vector<sf::IntRect>* getRectSet(unsigned int id)
+		{
+			if (u_anims.count(id)>0) {
+				return &u_anims[id];
+			}
+			LOG("Error try to get non-existing rect set %d", id);
+			return nullptr;
+		}
+		/*!
+		 * \brief Creer un sprite avec la texture et le rect
+		 *
+		 * \param texturerect id du rect (id_texture*100 + id_propre)
+		 *
+		 * \return un pointeur vers le sprite, nullptr si la texture ou le
+		 * rect est introuvable (non chargée), le pointeur reste valable pendant
+		 * toute l'execution du programme
+		 */
+		sf::Sprite* createSprite(unsigned int texturerect)
+		{
+			sf::IntRect* rect = getRect(texturerect);
+			sf::Texture* tex = getTexture(texturerect/100);
+			if (rect == nullptr || tex == nullptr)
+				return nullptr;
+			sf::Sprite* sp = new sf::Sprite();
+			sp->setTexture(*tex);
+			sp->setTextureRect(*rect);
+			u_sprites.push_back(sp);
+			return sp;
+		}
+		/*!
+		 * \brief Parse le fichier
+		 * \param filename nom du fichier
+		 * \return True si aucun problème, False sinon
+		 */
 	bool parseFile(const std::string& filename);
 	private:
 		sf::Font u_font; /*!< Font par default */
 		std::map<unsigned int, sf::Texture*> u_textures; /*!< Textures charges */
 		std::map<unsigned int, sf::IntRect> u_rects; /*!< Textures rects*/
-		std::map<unsigned int, std::vector<sf::IntRect>> u_anims; /*!< Anim (texturesets) rects*/
+		std::map<unsigned int, std::vector<sf::IntRect>> u_anims; /*!< Anim (texturesets) rects */
+		std::vector<sf::Sprite*> u_sprites; /*!< Sprites non annimés */
 		RessourcesManager()
 		{
 			#ifdef DEBUG
@@ -116,6 +190,10 @@ namespace core
 			for(it=u_textures.begin(); it!=u_textures.end(); it++) {
 				delete(it->second);
 				LOG("Ok free texture %d", it->first);
+			}
+			std::vector<sf::Sprite*>::iterator it2;
+			for(it2=u_sprites.begin(); it2 != u_sprites.end(); it2++) {
+				delete(*it2);
 			}
 		}
 	};
