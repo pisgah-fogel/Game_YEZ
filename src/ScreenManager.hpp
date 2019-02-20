@@ -35,10 +35,11 @@ namespace gui
 			while(u_window.isOpen())
 			{
 				sf::Event event;
+				sf::Time dt = u_clock.restart();
 				while (u_window.pollEvent(event))
 					if(!u_screen->handleEvent(event))
 						u_window.close();
-				u_screen->preCompute();
+				u_screen->preCompute(dt);
 				u_screen->draw(u_window);
 				u_screen->postCompute();
 			}
@@ -49,6 +50,7 @@ namespace gui
 			delete (u_screen);
 		}
 	private:
+		sf::Clock u_clock;
 		sf::RenderWindow u_window;
 		gui::Screen* u_screen;
 		

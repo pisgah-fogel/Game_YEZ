@@ -194,6 +194,7 @@ namespace core
 			std::vector<sf::Sprite*>::iterator it2;
 			for(it2=u_sprites.begin(); it2 != u_sprites.end(); it2++) {
 				delete(*it2);
+				LOG("Ok free sprite");
 			}
 		}
 	};

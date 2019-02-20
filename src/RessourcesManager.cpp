@@ -106,6 +106,7 @@ bool core::RessourcesManager::parseFile(const std::string& filename)
                 return false;
             }
             else if(count_ts==size) {
+                current_ts_vec.push_back(sf::IntRect(x, y, w, h));
                 u_anims[current_file*100 + current_texset] = current_ts_vec;
                 ts_set = false;
                 count_ts = 0;
