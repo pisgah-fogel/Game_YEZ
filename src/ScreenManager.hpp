@@ -8,7 +8,6 @@
 #include "Log.hpp"
 #include "Config.hpp"
 #include "Screen.hpp"
-#include "TestScreen.hpp"
 
 /*!
  * \file ScreenManager.hpp
@@ -25,9 +24,15 @@ namespace gui
 	class ScreenManager
 	{
 	public:
-		ScreenManager(): u_window(sf::VideoMode(800, 600), "Game YEZ")
+		ScreenManager(): u_window(sf::VideoMode(800, 600), "Game YEZ"), u_screen(nullptr)
 		{
-			u_screen = (Screen*)new TestScreen();
+		}
+		template <class T>
+		void loadScreen()
+		{
+			if (u_screen)
+				delete (u_screen);
+			u_screen = (Screen*)new T();
 			u_screen->init();
 		}
 		int mainLoop()
@@ -47,7 +52,8 @@ namespace gui
 		}
 		~ScreenManager()
 		{
-			delete (u_screen);
+			if (u_screen)
+				delete (u_screen);
 		}
 	private:
 		sf::Clock u_clock;
