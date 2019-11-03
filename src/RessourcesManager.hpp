@@ -155,8 +155,10 @@ namespace core
 		{
 			sf::IntRect* rect = getRect(texturerect);
 			sf::Texture* tex = getTexture(texturerect/100);
-			if (rect == nullptr || tex == nullptr)
+			if (rect == nullptr || tex == nullptr) {
+				LOG("Error cannot CreateSprite for textureRect %d", texturerect);
 				return nullptr;
+			}
 			sf::Sprite* sp = new sf::Sprite();
 			sp->setTexture(*tex);
 			sp->setTextureRect(*rect);

@@ -37,16 +37,18 @@ namespace gui
 			//std::string path = utils::Config::getInstance()->getString("tileset");
 			//core::RessourcesManager::getInstance()->loadTexture(path,0);
 			//sf::Texture *tex = core::RessourcesManager::getInstance()->getTexture(0);
-			sprite = core::RessourcesManager::getInstance()->createSprite(1);
-			sprite2 = core::RessourcesManager::getInstance()->createSprite(0);
+			sprite1 = core::RessourcesManager::getInstance()->createSprite(0);
+			sprite2 = core::RessourcesManager::getInstance()->createSprite(1);
 			sprite3 = core::RessourcesManager::getInstance()->createSprite(2);
+			sprite4 = core::RessourcesManager::getInstance()->createSprite(3);
 
-			sprite->setPosition(sf::Vector2f(10.f, 50.f));
+			sprite1->setPosition(sf::Vector2f(10.f, 50.f));
 			sprite2->setPosition(sf::Vector2f(60.f, 50.f));
 			sprite3->setPosition(sf::Vector2f(120.f, 50.f));
-			//sprite->move(sf::Vector2f(5.f, 10.f));
-			//sprite->setOrigin(sf::Vector2f(25.f, 25.f));
-			//sf::Vector2f position = sprite.getPosition();
+			sprite4->setPosition(sf::Vector2f(60.f, 110.f));
+			//sprite1->move(sf::Vector2f(5.f, 10.f));
+			//sprite1->setOrigin(sf::Vector2f(25.f, 25.f));
+			//sf::Vector2f position = sprite1.getPosition();
 		}
 		virtual void preCompute(sf::Time &dt)
 		{
@@ -62,13 +64,13 @@ namespace gui
 				if (event.key.code == sf::Keyboard::Escape) {
 					return false; // exit
 				} else if (event.key.code == sf::Keyboard::Z) {
-					sprite->move(sf::Vector2f(0.f, -2.f));
+					sprite1->move(sf::Vector2f(0.f, -2.f));
 				} else if (event.key.code == sf::Keyboard::S) {
-					sprite->move(sf::Vector2f(0.f, 2.f));
+					sprite1->move(sf::Vector2f(0.f, 2.f));
 				} else if (event.key.code == sf::Keyboard::Q) {
-					sprite->move(sf::Vector2f(-2.f, 0.f));
+					sprite1->move(sf::Vector2f(-2.f, 0.f));
 				} else if (event.key.code == sf::Keyboard::D) {
-					sprite->move(sf::Vector2f(2.f, 0.f));
+					sprite1->move(sf::Vector2f(2.f, 0.f));
 				}
 			}
 			return true;
@@ -78,9 +80,10 @@ namespace gui
 			win.clear();
 			win.draw(shape);
 			win.draw(text);
-			win.draw(*sprite);
+			win.draw(*sprite1);
 			win.draw(*sprite2);
 			win.draw(*sprite3);
+			win.draw(*sprite4);
 			win.draw(*testAnim);
 			win.display();
 		}
@@ -89,9 +92,10 @@ namespace gui
 		}
 
 		sf::CircleShape shape;
-		sf::Sprite* sprite;
+		sf::Sprite* sprite1;
 		sf::Sprite* sprite2;
 		sf::Sprite* sprite3;
+		sf::Sprite* sprite4;
 		AnimSprite* testAnim;
 		sf::Text text;
 	};
