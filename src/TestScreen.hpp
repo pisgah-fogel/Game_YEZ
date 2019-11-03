@@ -8,6 +8,7 @@
 #include "RessourcesManager.hpp"
 #include "Log.hpp"
 #include "Config.hpp"
+#include "TileMap.hpp"
 
 namespace gui
 {
@@ -19,9 +20,13 @@ namespace gui
 		}
 		~TestScreen()
 		{
+			if (testAnim)
+				delete (testAnim);
+			if (userView)
+				delete (userView);
+			if (tileMap)
+				delete (tileMap);
 			LOG("Debug Test screen freed");
-			delete (testAnim);
-			delete (userView);
 		}
 		virtual void init(sf::RenderWindow& win)
 		{
@@ -32,6 +37,22 @@ namespace gui
 
 			text.setFont(*core::RessourcesManager::getInstance()->getDefaultFont());
 			text.setString("This is a test");
+
+			const unsigned int testLevel[] =
+			{
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 3, 1, 1, 1, 1, 1, 4, 0, 0,
+				0, 2, 0, 0, 0, 0, 0, 2, 0, 0,
+				0, 2, 0, 0, 0, 0, 0, 2, 0, 0,
+				0, 4, 1, 1, 1, 1, 1, 1, 0, 0,
+
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			};
+			tileMap = new TileMap(0, testLevel, sf::Vector2f(100.f, 100.f), 10, 10);
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -105,6 +126,7 @@ namespace gui
 		const sf::View* defaultView;
 		sf::View* userView;
 		sf::Text text;
+		TileMap* tileMap;
 	};
 }
 

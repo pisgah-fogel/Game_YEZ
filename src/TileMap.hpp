@@ -17,7 +17,7 @@ public:
 	 */
 	TileMap(unsigned int texid, const unsigned int* tiles, sf::Vector2u tileSize, unsigned int width, unsigned int height): m_tileset(nullptr)
 	{
-		m_tileset = core::RessourcesManager::getInstance()->getTexture(id);
+		m_tileset = core::RessourcesManager::getInstance()->getTexture(texid);
 		if (!m_tileset) {
 			LOG("Error cannot get texture, abord");
 		}
@@ -25,8 +25,8 @@ public:
 		m_vertices.setPrimitiveType(sf::Quads);
 		m_vertices.resize(width * height * 4);
 
-		for (auto i = 0; i<width; i++) {
-			for (auto j = 0; j<height; j++) {
+		for (unsigned int i = 0; i<width; i++) {
+			for (unsigned int j = 0; j<height; j++) {
 				// Vertex's Quad position
 				sf::Vertex* quad = &m_vertices[(i+j*width)*4];
 				quad[0].position = sf::Vector2f(i*tileSize.x, j*tileSize.y);
@@ -48,6 +48,7 @@ public:
 	}
 	~TileMap()
 	{
+		LOG("Debug TileMap is freed");
 	}
 
 private:
