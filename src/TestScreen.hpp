@@ -21,10 +21,12 @@ namespace gui
 		{
 			LOG("Debug Test screen freed");
 			delete (testAnim);
+			delete (userView);
 		}
 		virtual void init(sf::RenderWindow& win)
 		{
-			defaultView = win.getDefaultView();
+			defaultView = &win.getDefaultView(); // is sf::View(0, 0, 1000, 1000)
+			userView = new sf::View(sf:: FloatRect(0, 0, 2000, 2000));
 			core::RessourcesManager::getInstance()->parseFile("test.conf");
 			core::RessourcesManager::getInstance()->loadDefaultFont();
 
@@ -79,12 +81,14 @@ namespace gui
 		virtual void draw(sf::RenderWindow& win)
 		{
 			win.clear();
+			win.setView(*defaultView);
 			win.draw(shape);
 			win.draw(text);
-			win.draw(*sprite1);
 			win.draw(*sprite2);
 			win.draw(*sprite3);
 			win.draw(*sprite4);
+			win.setView(*userView);
+			win.draw(*sprite1);
 			win.draw(*testAnim);
 			win.display();
 		}
@@ -98,7 +102,8 @@ namespace gui
 		sf::Sprite* sprite3;
 		sf::Sprite* sprite4;
 		AnimSprite* testAnim;
-		sf::View defaultView;
+		const sf::View* defaultView;
+		sf::View* userView;
 		sf::Text text;
 	};
 }
