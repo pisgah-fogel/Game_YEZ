@@ -58,6 +58,19 @@ namespace gui
 				return false; // exit
 			else if (event.type == sf::Event::MouseButtonPressed)
 				testAnim->next();
+			else if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::Escape) {
+					return false; // exit
+				} else if (event.key.code == sf::Keyboard::Z) {
+					sprite->move(sf::Vector2f(0.f, -2.f));
+				} else if (event.key.code == sf::Keyboard::S) {
+					sprite->move(sf::Vector2f(0.f, 2.f));
+				} else if (event.key.code == sf::Keyboard::Q) {
+					sprite->move(sf::Vector2f(-2.f, 0.f));
+				} else if (event.key.code == sf::Keyboard::D) {
+					sprite->move(sf::Vector2f(2.f, 0.f));
+				}
+			}
 			return true;
 		}
 		virtual void draw(sf::RenderWindow& win)
