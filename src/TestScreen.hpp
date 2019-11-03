@@ -22,13 +22,14 @@ namespace gui
 			LOG("Debug Test screen freed");
 			delete (testAnim);
 		}
-		virtual void init()
+		virtual void init(sf::RenderWindow& win)
 		{
+			defaultView = win.getDefaultView();
 			core::RessourcesManager::getInstance()->parseFile("test.conf");
 			core::RessourcesManager::getInstance()->loadDefaultFont();
 
 			text.setFont(*core::RessourcesManager::getInstance()->getDefaultFont());
-			text.setString("Hello world");
+			text.setString("This is a test");
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -97,6 +98,7 @@ namespace gui
 		sf::Sprite* sprite3;
 		sf::Sprite* sprite4;
 		AnimSprite* testAnim;
+		sf::View defaultView;
 		sf::Text text;
 	};
 }

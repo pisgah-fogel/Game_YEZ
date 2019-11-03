@@ -33,7 +33,7 @@ namespace gui
 			if (u_screen)
 				delete (u_screen);
 			u_screen = (Screen*)new T();
-			u_screen->init();
+			u_screen->init(u_window);
 		}
 		int mainLoop()
 		{

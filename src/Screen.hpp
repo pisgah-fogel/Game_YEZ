@@ -15,7 +15,7 @@ namespace gui
 	public:
 		Screen(){};
 		virtual ~Screen(){};
-		virtual void init()=0;
+		virtual void init(sf::RenderWindow& win)=0;
 		virtual void preCompute(sf::Time &dt)=0;
 		virtual bool handleEvent(sf::Event& event)=0;
 		virtual void draw(sf::RenderWindow& win)=0;
