@@ -38,10 +38,10 @@ public:
 				unsigned int rectid = tiles[i+j*width];
 				sf::IntRect* rect = core::RessourcesManager::getInstance()->getRect(rectid);
 				if (rect) {
-					quad[0].position = sf::Vector2f(rect->x, rect->y);
-					quad[1].position = sf::Vector2f(rect->x+rect->w, rect->y);
-					quad[2].position = sf::Vector2f(rect->x+rect->w, rect->y+rect->h);
-					quad[3].position = sf::Vector2f(rect->x, rect->y+rect->h);
+					quad[0].position = sf::Vector2f(rect->left, rect->top);
+					quad[1].position = sf::Vector2f(rect->left+rect->width, rect->top);
+					quad[2].position = sf::Vector2f(rect->left+rect->width, rect->top+rect->height);
+					quad[3].position = sf::Vector2f(rect->left, rect->top+rect->height);
 				}
 			}
 		}
@@ -55,7 +55,7 @@ private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         states.transform *= getTransform();
-        states.texture = &m_tileset;
+        states.texture = m_tileset;
         target.draw(m_vertices, states);
     }
 

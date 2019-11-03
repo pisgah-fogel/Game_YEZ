@@ -52,7 +52,7 @@ namespace gui
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			};
-			tileMap = new TileMap(0, testLevel, sf::Vector2f(100.f, 100.f), 10, 10);
+			tileMap = new TileMap(0, testLevel, sf::Vector2u(100, 100), 10, 10);
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -103,6 +103,8 @@ namespace gui
 		{
 			win.clear();
 			win.setView(*defaultView);
+			if (tileMap)
+				win.draw(*tileMap);
 			win.draw(shape);
 			win.draw(text);
 			win.draw(*sprite2);
