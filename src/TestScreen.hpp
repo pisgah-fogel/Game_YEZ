@@ -15,7 +15,7 @@ namespace gui
 	class TestScreen: Screen
 	{
 	public:
-		TestScreen(): shape(100.f)
+		TestScreen(): shape(5.f)
 		{
 		}
 		~TestScreen()
@@ -40,19 +40,10 @@ namespace gui
 
 			const unsigned int testLevel[] =
 			{
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 3, 1, 1, 1, 1, 1, 4, 0, 0,
-				0, 2, 0, 0, 0, 0, 0, 2, 0, 0,
-				0, 2, 0, 0, 0, 0, 0, 2, 0, 0,
-				0, 4, 1, 1, 1, 1, 1, 1, 0, 0,
-
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 1,
+				2, 3,
 			};
-			tileMap = new TileMap(0, testLevel, sf::Vector2u(100, 100), 10, 10);
+			tileMap = new TileMap(0, testLevel, sf::Vector2u(100, 100), 2, 2);
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -105,14 +96,14 @@ namespace gui
 			win.setView(*defaultView);
 			if (tileMap)
 				win.draw(*tileMap);
-			win.draw(shape);
-			win.draw(text);
-			win.draw(*sprite2);
-			win.draw(*sprite3);
-			win.draw(*sprite4);
-			win.setView(*userView);
-			win.draw(*sprite1);
-			win.draw(*testAnim);
+			//win.draw(shape);
+			//win.draw(text);
+			//win.draw(*sprite2);
+			//win.draw(*sprite3);
+			//win.draw(*sprite4);
+			//win.setView(*userView);
+			//win.draw(*sprite1);
+			//win.draw(*testAnim);
 			win.display();
 		}
 		virtual void postCompute()
