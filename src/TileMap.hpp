@@ -2,6 +2,7 @@
 #define TILEMAP_HPP
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "RessourcesManager.hpp"
 #include "Log.hpp"
 
@@ -38,10 +39,10 @@ public:
 				unsigned int rectid = tiles[i+j*width];
 				sf::IntRect* rect = core::RessourcesManager::getInstance()->getRect(rectid);
 				if (rect) {
-					quad[0].position = sf::Vector2f(rect->left, rect->top);
-					quad[1].position = sf::Vector2f(rect->left+rect->width, rect->top);
-					quad[2].position = sf::Vector2f(rect->left+rect->width, rect->top+rect->height);
-					quad[3].position = sf::Vector2f(rect->left, rect->top+rect->height);
+					quad[0].texCoords = sf::Vector2f(rect->left, rect->top);
+					quad[1].texCoords = sf::Vector2f(rect->left+rect->width, rect->top);
+					quad[2].texCoords = sf::Vector2f(rect->left+rect->width, rect->top+rect->height);
+					quad[3].texCoords = sf::Vector2f(rect->left, rect->top+rect->height);
 				}
 			}
 		}
