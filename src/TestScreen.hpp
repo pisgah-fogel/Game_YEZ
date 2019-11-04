@@ -40,10 +40,14 @@ namespace gui
 
 			const unsigned int testLevel[] =
 			{
-				0, 1,
-				2, 3,
+				7, 1, 0, 1, 0, 7,
+				0, 1, 3, 3, 0, 1,
+				0, 9, 9, 9, 9, 1,
+				0, 1, 4, 4, 0, 1,
+				0, 1, 5, 5, 0, 1,
+				7, 1, 0, 1, 0, 7,
 			};
-			tileMap = new TileMap(0, testLevel, sf::Vector2u(100, 100), 2, 2);
+			tileMap = new TileMap(0, testLevel, sf::Vector2u(50, 50), 6, 6);
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -96,14 +100,14 @@ namespace gui
 			win.setView(*defaultView);
 			if (tileMap)
 				win.draw(*tileMap);
-			//win.draw(shape);
-			//win.draw(text);
-			//win.draw(*sprite2);
-			//win.draw(*sprite3);
-			//win.draw(*sprite4);
-			//win.setView(*userView);
-			//win.draw(*sprite1);
-			//win.draw(*testAnim);
+			win.draw(shape);
+			win.draw(text);
+			win.draw(*sprite2);
+			win.draw(*sprite3);
+			win.draw(*sprite4);
+			win.setView(*userView);
+			win.draw(*sprite1);
+			win.draw(*testAnim);
 			win.display();
 		}
 		virtual void postCompute()
