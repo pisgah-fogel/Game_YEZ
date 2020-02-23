@@ -9,6 +9,7 @@
 #include "Log.hpp"
 #include "Config.hpp"
 #include "TileMap.hpp"
+#include "Particles.hpp"
 
 namespace gui
 {
@@ -26,6 +27,8 @@ namespace gui
 				delete (userView);
 			if (tileMap)
 				delete (tileMap);
+			if (particles)
+				delete (particles);
 			LOG("Debug Test screen freed");
 		}
 		virtual void init(sf::RenderWindow& win)
@@ -53,6 +56,9 @@ namespace gui
 			testAnim->rloop(0, 3, 0.5f);
 			shape.setFillColor(sf::Color::Green);
 
+			particles = new ParticleSystem(10);
+			particles->setEmitter(sf::Vector2f(50.f,50.f));
+
 			//std::string path = utils::Config::getInstance()->getString("tileset");
 			//core::RessourcesManager::getInstance()->loadTexture(path,0);
 			//sf::Texture *tex = core::RessourcesManager::getInstance()->getTexture(0);
@@ -72,6 +78,7 @@ namespace gui
 		virtual void preCompute(sf::Time &dt)
 		{
 			testAnim->update(dt);
+			particles->update(dt);
 		}
 		virtual bool handleEvent(sf::Event& event)
 		{
@@ -108,6 +115,7 @@ namespace gui
 			win.setView(*userView);
 			win.draw(*sprite1);
 			win.draw(*testAnim);
+			win.draw(*particles);
 			win.display();
 		}
 		virtual void postCompute()
@@ -124,6 +132,7 @@ namespace gui
 		sf::View* userView;
 		sf::Text text;
 		TileMap* tileMap;
+		ParticleSystem *particles;
 	};
 }
 
