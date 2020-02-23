@@ -13,14 +13,23 @@ public:
     /**
      * @brief Construct a new Particle System object
      * 
+     * @param texid Texture id (registered in the ressourceManager)
      * @param count Number of particles
      */
-    ParticleSystem(unsigned int count) :
+    ParticleSystem(unsigned int texid, unsigned int count) :
     m_particles(count),
     m_vertices(sf::Points, count),
     m_lifetime(sf::seconds(3)),
     m_emitter(0, 0)
     {
+        m_texture = core::RessourcesManager::getInstance()->getTexture(texid);
+		if (!m_texture) {
+			LOG("Error cannot get texture, abord");
+		}
+    }
+
+    ~ParticleSystem() {
+        LOG("Debug ParticleSystem is freed");
     }
 
     /**
@@ -59,7 +68,7 @@ private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         states.transform *= getTransform();
-        states.texture = NULL;
+        states.texture = m_texture;
         target.draw(m_vertices, states);
     }
 
@@ -92,6 +101,7 @@ private:
     sf::VertexArray m_vertices;
     sf::Time m_lifetime;
     sf::Vector2f m_emitter;
+    sf::Texture* m_texture;
 };
 
 #endif // PARTICLES_HPP

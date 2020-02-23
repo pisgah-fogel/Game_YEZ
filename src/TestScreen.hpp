@@ -56,7 +56,7 @@ namespace gui
 			testAnim->rloop(0, 3, 0.5f);
 			shape.setFillColor(sf::Color::Green);
 
-			particles = new ParticleSystem(10);
+			particles = new ParticleSystem(0,10);
 			particles->setEmitter(sf::Vector2f(50.f,50.f));
 
 			//std::string path = utils::Config::getInstance()->getString("tileset");
