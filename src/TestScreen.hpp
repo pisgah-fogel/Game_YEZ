@@ -26,6 +26,8 @@ namespace gui
 				delete (userView);
 			if (tileMap)
 				delete (tileMap);
+			if (objectsMap)
+				delete (objectsMap);
 			LOG("Debug Test screen freed");
 		}
 		virtual void init(sf::RenderWindow& win)
@@ -48,6 +50,17 @@ namespace gui
 				30, 31, 8, 1, 0, 7,
 			};
 			tileMap = new TileMap(0, testLevel, sf::Vector2u(50, 50), 6, 6);
+
+			const unsigned int testLevel_objects[] =
+			{
+				32, 33, 33, 33, 33, 33,
+				32, 33, 33, 33, 33, 33,
+				32, 33, 33, 33, 33, 33,
+				32, 33, 33, 33, 33, 33,
+				32, 33, 33, 33, 33, 33,
+				32, 33, 33, 33, 33, 33,
+			};
+			objectsMap = new TileMap(0, testLevel_objects, sf::Vector2u(50, 50), 6, 6);
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -100,6 +113,8 @@ namespace gui
 			win.setView(*defaultView);
 			if (tileMap)
 				win.draw(*tileMap);
+			if (objectsMap)
+				win.draw(*objectsMap);
 			win.draw(shape);
 			win.draw(text);
 			win.draw(*sprite2);
@@ -124,6 +139,7 @@ namespace gui
 		sf::View* userView;
 		sf::Text text;
 		TileMap* tileMap;
+		TileMap* objectsMap;
 	};
 }
 
