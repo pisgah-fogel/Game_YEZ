@@ -3,12 +3,16 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <math.h>
 
 #include "Screen.hpp"
 #include "RessourcesManager.hpp"
 #include "Log.hpp"
 #include "Config.hpp"
 #include "TileMap.hpp"
+
+#define SPEED_WALK 20.f
+#define SPEED_RUN 40.f
 
 namespace gui
 {
@@ -33,7 +37,7 @@ namespace gui
 		virtual void init(sf::RenderWindow& win)
 		{
 			defaultView = &win.getDefaultView(); // is sf::View(0, 0, 1000, 1000)
-			userView = new sf::View(sf:: FloatRect(0, 0, 1000, 1000));
+			userView = new sf::View(sf:: FloatRect(0, 0, 200, 200));
 			core::RessourcesManager::getInstance()->parseFile("test.conf");
 			core::RessourcesManager::getInstance()->loadDefaultFont();
 
@@ -49,7 +53,7 @@ namespace gui
 				24, 25, 26, 27, 28, 29,
 				30, 31, 8, 1, 0, 7,
 			};
-			tileMap = new TileMap(0, testLevel, sf::Vector2u(50, 50), 6, 6);
+			tileMap = new TileMap(0, testLevel, sf::Vector2u(16, 16), 6, 6);
 
 			const unsigned int testLevel_objects[] =
 			{
@@ -60,7 +64,7 @@ namespace gui
 				32, 33, 33, 33, 33, 33,
 				32, 33, 33, 33, 33, 33,
 			};
-			objectsMap = new TileMap(0, testLevel_objects, sf::Vector2u(50, 50), 6, 6);
+			objectsMap = new TileMap(0, testLevel_objects, sf::Vector2u(16, 16), 6, 6);
 
 			testAnim = new AnimSprite(100);
 			testAnim->rloop(0, 3, 0.5f);
@@ -85,9 +89,20 @@ namespace gui
 		virtual void preCompute(sf::Time &dt)
 		{
 			testAnim->update(dt);
+			float sec = dt.asSeconds();
+			if (forward_pressed)
+				sprite1->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
+			else if (backward_pressed)
+				sprite1->move(sf::Vector2f(0.f, SPEED_WALK*sec));
+			
+			if (left_pressed)
+				sprite1->move(sf::Vector2f(-SPEED_WALK*sec, 0.f));
+			else if (right_pressed)
+				sprite1->move(sf::Vector2f(SPEED_WALK*sec, 0.f));
 		}
 		virtual bool handleEvent(sf::Event& event)
 		{
+
             if (event.type == sf::Event::Closed)
 				return false; // exit
 			else if (event.type == sf::Event::MouseButtonPressed)
@@ -96,13 +111,24 @@ namespace gui
 				if (event.key.code == sf::Keyboard::Escape) {
 					return false; // exit
 				} else if (event.key.code == sf::Keyboard::Z) {
-					sprite1->move(sf::Vector2f(0.f, -2.f));
+					forward_pressed = true;
 				} else if (event.key.code == sf::Keyboard::S) {
-					sprite1->move(sf::Vector2f(0.f, 2.f));
+					backward_pressed = true;
 				} else if (event.key.code == sf::Keyboard::Q) {
-					sprite1->move(sf::Vector2f(-2.f, 0.f));
+					left_pressed = true;
 				} else if (event.key.code == sf::Keyboard::D) {
-					sprite1->move(sf::Vector2f(2.f, 0.f));
+					right_pressed = true;
+				}
+			}
+			else if (event.type == sf::Event::KeyReleased) {
+				if (event.key.code == sf::Keyboard::Z) {
+					forward_pressed = false;
+				} else if (event.key.code == sf::Keyboard::S) {
+					backward_pressed = false;
+				} else if (event.key.code == sf::Keyboard::Q) {
+					left_pressed = false;
+				} else if (event.key.code == sf::Keyboard::D) {
+					right_pressed = false;
 				}
 			}
 			return true;
@@ -111,6 +137,8 @@ namespace gui
 		{
 			win.clear();
 			win.setView(*defaultView);
+			// TODO draw gui here
+			win.setView(*userView);
 			if (tileMap)
 				win.draw(*tileMap);
 			if (objectsMap)
@@ -120,7 +148,6 @@ namespace gui
 			win.draw(*sprite2);
 			win.draw(*sprite3);
 			win.draw(*sprite4);
-			win.setView(*userView);
 			win.draw(*sprite1);
 			win.draw(*testAnim);
 			win.display();
@@ -140,6 +167,13 @@ namespace gui
 		sf::Text text;
 		TileMap* tileMap;
 		TileMap* objectsMap;
+		double direction = 0, speed = 0; // Unit: radian
+
+		// Remenber witch key is pressed
+		bool forward_pressed = false;
+		bool backward_pressed = false;
+		bool left_pressed = false;
+		bool right_pressed = false;
 	};
 }
 
