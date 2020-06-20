@@ -57,12 +57,12 @@ namespace gui
 
 			const unsigned int testLevel_objects[] =
 			{
+				33, 33, 33, 33, 33, 33,
+				33, 33, 33, 33, 33, 33,
+				33, 33, 32, 33, 33, 33,
+				33, 33, 33, 33, 33, 33,
 				32, 33, 33, 33, 33, 33,
-				32, 33, 33, 33, 33, 33,
-				32, 33, 33, 33, 33, 33,
-				32, 33, 33, 33, 33, 33,
-				32, 33, 33, 33, 33, 33,
-				32, 33, 33, 33, 33, 33,
+				33, 33, 33, 33, 33, 33,
 			};
 			objectsMap = new TileMap(0, testLevel_objects, sf::Vector2u(16, 16), 6, 6);
 
@@ -89,13 +89,15 @@ namespace gui
 		virtual void preCompute(sf::Time &dt)
 		{
 			testAnim->update(dt);
+
+			// Move character
 			float sec = dt.asSeconds();
-			if (forward_pressed)
+			if (forward_pressed && !backward_pressed)
 				sprite1->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
 			else if (backward_pressed)
 				sprite1->move(sf::Vector2f(0.f, SPEED_WALK*sec));
 			
-			if (left_pressed)
+			if (left_pressed && !right_pressed)
 				sprite1->move(sf::Vector2f(-SPEED_WALK*sec, 0.f));
 			else if (right_pressed)
 				sprite1->move(sf::Vector2f(SPEED_WALK*sec, 0.f));
@@ -167,7 +169,6 @@ namespace gui
 		sf::Text text;
 		TileMap* tileMap;
 		TileMap* objectsMap;
-		double direction = 0, speed = 0; // Unit: radian
 
 		// Remenber witch key is pressed
 		bool forward_pressed = false;
