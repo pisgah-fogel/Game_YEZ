@@ -10,6 +10,7 @@
 #include "Log.hpp"
 #include "Config.hpp"
 #include "TileMap.hpp"
+#include "Character.hpp"
 
 #define SPEED_WALK 20.f
 #define SPEED_RUN 40.f
