@@ -98,9 +98,9 @@ namespace gui
 				
 				if (tile_x_coor_1 < 6 && tile_y_coor < 6) {
 					if (testLevel_objects[6*tile_y_coor + tile_x_coor_1] == 32)
-						LOG("Test Chest");
+						LOG("Test Chest up");
 					else if (testLevel_objects[6*tile_y_coor + tile_x_coor_2] == 32)
-						LOG("Test Chest");
+						LOG("Test Chest up");
 				}
 
 				//LOG("Test User will collision up");
@@ -109,6 +109,45 @@ namespace gui
 				//LOG("Test and with x:%d y:%d", tile_x_coor_2, tile_y_coor);
 
 			}
+			else if(((int)c.top+(int)c.height) % 16 < dt_f) { // We are going to hit a tile (down)
+				int tile_y_coor = ((int)c.top)/16 + 1;
+
+				int tile_x_coor_1 = ((int)c.left)/16;
+
+				int tile_x_coor_2 = tile_x_coor_1;
+				if (((int)c.left)%16 + (int)c.width > 16) // also collide with the adjacent tile
+					tile_x_coor_2++;
+				
+				if (tile_x_coor_1 < 6 && tile_y_coor < 6) {
+					if (testLevel_objects[6*tile_y_coor + tile_x_coor_1] == 32)
+						LOG("Test Chest down");
+					else if (testLevel_objects[6*tile_y_coor + tile_x_coor_2] == 32)
+						LOG("Test Chest down");
+				}
+			}
+		}
+
+		void get_character_tiles() {
+			sf::FloatRect c = userCharacter->get_collision();
+			std::vector<std::pair<int, int>> pos;
+			int base_x = ((int)c.left)/16;
+			int base_y = ((int)c.top)/16;
+			/*
+			pos.push_back({base_x, base_y});
+
+			if(((int)c.left)%16 + (int)c.width > 16) {
+				pos.push_back({base_x+1, base_y});
+				if(((int)c.top)%16 + (int)c.height > 16) {
+					pos.push_back({base_x+1, base_y+1});
+				}
+			}
+			else if(((int)c.top)%16 + (int)c.height > 16) {
+				pos.push_back({base_x, base_y+1});
+			}*/
+
+			LOG("Test Character positions:");
+			for (auto it = pos.begin(); it!=pos.end(); it++)
+				LOG("    x:%d y%d", it->first, it->second);
 		}
 
 		virtual void preCompute(sf::Time &dt)
