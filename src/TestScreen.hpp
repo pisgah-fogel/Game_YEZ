@@ -33,6 +33,8 @@ namespace gui
 				delete (tileMap);
 			if (objectsMap)
 				delete (objectsMap);
+			if (userCharacter)
+			delete (userCharacter);
 			LOG("Debug Test screen freed");
 		}
 		virtual void init(sf::RenderWindow& win)
@@ -74,6 +76,14 @@ namespace gui
 			//std::string path = utils::Config::getInstance()->getString("tileset");
 			//core::RessourcesManager::getInstance()->loadTexture(path,0);
 			//sf::Texture *tex = core::RessourcesManager::getInstance()->getTexture(0);
+
+			userCharacter = new Character(200);
+			userCharacter->register_anim("up", {0, 1, 2});
+			userCharacter->register_anim("left", {3, 4, 5});
+			userCharacter->register_anim("right", {6, 7, 8});
+			userCharacter->register_anim("down", {9, 10, 11});
+			userCharacter->stop_anim();
+
 			sprite1 = core::RessourcesManager::getInstance()->createSprite(0);
 			sprite2 = core::RessourcesManager::getInstance()->createSprite(1);
 			sprite3 = core::RessourcesManager::getInstance()->createSprite(2);
@@ -83,6 +93,7 @@ namespace gui
 			sprite2->setPosition(sf::Vector2f(60.f, 50.f));
 			sprite3->setPosition(sf::Vector2f(120.f, 50.f));
 			sprite4->setPosition(sf::Vector2f(60.f, 110.f));
+			userCharacter->setPosition(sf::Vector2f(20.f, 20.f));
 			//sprite1->move(sf::Vector2f(5.f, 10.f));
 			//sprite1->setOrigin(sf::Vector2f(25.f, 25.f));
 			//sf::Vector2f position = sprite1.getPosition();
@@ -91,17 +102,27 @@ namespace gui
 		{
 			testAnim->update(dt);
 
+			userCharacter->update(dt);
+
 			// Move character
 			float sec = dt.asSeconds();
-			if (forward_pressed && !backward_pressed)
-				sprite1->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
-			else if (backward_pressed)
-				sprite1->move(sf::Vector2f(0.f, SPEED_WALK*sec));
+			if (forward_pressed && !backward_pressed) {
+				userCharacter->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
+				userCharacter->play_anim("down");
+			}
+			else if (backward_pressed) {
+				userCharacter->move(sf::Vector2f(0.f, SPEED_WALK*sec));
+				userCharacter->play_anim("up");
+			}
 			
-			if (left_pressed && !right_pressed)
-				sprite1->move(sf::Vector2f(-SPEED_WALK*sec, 0.f));
-			else if (right_pressed)
-				sprite1->move(sf::Vector2f(SPEED_WALK*sec, 0.f));
+			if (left_pressed && !right_pressed) {
+				userCharacter->move(sf::Vector2f(-SPEED_WALK*sec, 0.f));
+				userCharacter->play_anim("left");
+			}
+			else if (right_pressed){
+				userCharacter->move(sf::Vector2f(SPEED_WALK*sec, 0.f));
+				userCharacter->play_anim("right");
+			}
 		}
 		virtual bool handleEvent(sf::Event& event)
 		{
@@ -153,6 +174,7 @@ namespace gui
 			win.draw(*sprite4);
 			win.draw(*sprite1);
 			win.draw(*testAnim);
+			win.draw(*userCharacter);
 			win.display();
 		}
 		virtual void postCompute()
@@ -165,6 +187,7 @@ namespace gui
 		sf::Sprite* sprite3;
 		sf::Sprite* sprite4;
 		AnimSprite* testAnim;
+		Character* userCharacter;
 		const sf::View* defaultView;
 		sf::View* userView;
 		sf::Text text;
