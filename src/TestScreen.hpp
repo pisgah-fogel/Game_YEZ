@@ -46,27 +46,10 @@ namespace gui
 
 			text.setFont(*core::RessourcesManager::getInstance()->getDefaultFont());
 			text.setString("This is a test");
-
-			const unsigned int testLevel[] =
-			{
-				0, 1, 2, 3, 4, 5,
-				6, 7, 8, 9, 10, 11,
-				12, 13, 14, 15, 16, 17,
-				18, 19, 20, 21, 22, 23,
-				24, 25, 26, 27, 28, 29,
-				30, 31, 8, 1, 0, 7,
-			};
+			text.setPosition(sf::Vector2f(20.f, 100.f));
+			
 			tileMap = new TileMap(0, testLevel, sf::Vector2u(16, 16), 6, 6);
 
-			const unsigned int testLevel_objects[] =
-			{
-				33, 33, 33, 33, 33, 33,
-				33, 33, 33, 33, 33, 33,
-				33, 33, 32, 33, 33, 33,
-				33, 33, 33, 33, 33, 33,
-				32, 33, 33, 33, 33, 33,
-				33, 33, 33, 33, 33, 33,
-			};
 			objectsMap = new TileMap(0, testLevel_objects, sf::Vector2u(16, 16), 6, 6);
 
 			testAnim = new AnimSprite(100);
@@ -84,6 +67,7 @@ namespace gui
 			userCharacter->register_anim("down", {10, 11, 9});
 			userCharacter->stop_anim();
 			userCharacter->static_anim(0);
+			userCharacter->setPosition(sf::Vector2f(20.f, 20.f));
 
 			sprite1 = core::RessourcesManager::getInstance()->createSprite(0);
 			sprite2 = core::RessourcesManager::getInstance()->createSprite(1);
@@ -94,11 +78,39 @@ namespace gui
 			sprite2->setPosition(sf::Vector2f(60.f, 50.f));
 			sprite3->setPosition(sf::Vector2f(120.f, 50.f));
 			sprite4->setPosition(sf::Vector2f(60.f, 110.f));
-			userCharacter->setPosition(sf::Vector2f(20.f, 20.f));
+			
 			//sprite1->move(sf::Vector2f(5.f, 10.f));
 			//sprite1->setOrigin(sf::Vector2f(25.f, 25.f));
 			//sf::Vector2f position = sprite1.getPosition();
 		}
+
+		// this function update coll_right, coll_left, coll_up, coll_down
+		void character_tile_collision(float dt_f) {
+			sf::FloatRect c = userCharacter->get_collision();
+			if (((int)c.top) % 16 < dt_f) { // We are going to hit a tile (up)
+				int tile_y_coor = ((int)c.top)/16 - 1; // collide with the bloc on top of the character
+				
+				int tile_x_coor_1 = ((int)c.left)/16; // column of the colllision
+
+				int tile_x_coor_2 = tile_x_coor_1;
+				if (((int)c.left)%16 + (int)c.width > 16) // also collide with the adjacent tile
+					tile_x_coor_2++;
+				
+				if (tile_x_coor_1 < 6 && tile_y_coor < 6) {
+					if (testLevel_objects[6*tile_y_coor + tile_x_coor_1] == 32)
+						LOG("Test Chest");
+					else if (testLevel_objects[6*tile_y_coor + tile_x_coor_2] == 32)
+						LOG("Test Chest");
+				}
+
+				//LOG("Test User will collision up");
+				//LOG("Test User collision: left:%f top:%f width:%f height:%f", c.left, c.top, c.width, c.height);
+				//LOG("Test Collide with x:%d y:%d", tile_x_coor_1, tile_y_coor);
+				//LOG("Test and with x:%d y:%d", tile_x_coor_2, tile_y_coor);
+
+			}
+		}
+
 		virtual void preCompute(sf::Time &dt)
 		{
 			testAnim->update(dt);
@@ -107,6 +119,9 @@ namespace gui
 
 			// Move character
 			float sec = dt.asSeconds();
+
+			character_tile_collision(SPEED_WALK*sec);
+
 			// only accept one key stoke
 			if (forward_pressed && !backward_pressed && !left_pressed && !right_pressed) {
 				userCharacter->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
@@ -202,6 +217,27 @@ namespace gui
 		bool backward_pressed = false;
 		bool left_pressed = false;
 		bool right_pressed = false;
+
+		bool coll_right=false, coll_left=false, coll_up=false, coll_down=false;
+
+		unsigned int testLevel[36] =
+			{
+				0, 1, 2, 3, 4, 5,
+				6, 7, 8, 9, 10, 11,
+				12, 13, 14, 15, 16, 17,
+				18, 19, 20, 21, 22, 23,
+				24, 25, 26, 27, 28, 29,
+				30, 31, 8, 1, 0, 7,
+			};
+		unsigned int testLevel_objects[36] =
+			{
+				33, 33, 33, 33, 33, 33,
+				33, 33, 33, 33, 33, 33,
+				33, 33, 32, 33, 33, 33,
+				33, 33, 33, 33, 33, 33,
+				32, 33, 33, 33, 33, 33,
+				33, 33, 33, 33, 33, 33,
+			};
 	};
 }
 

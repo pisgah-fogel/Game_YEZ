@@ -49,6 +49,15 @@ public:
         }
     }
 
+    sf::FloatRect get_collision() {
+        sf::FloatRect x;
+        x.left = this->getPosition().x + 5;
+        x.top = this->getPosition().y + 3;
+        x.width = 16 - 5;
+        x.height = 16 - 3;
+        return x;
+    }
+
     void play_anim(std::string anim_name) {
         // We need to update the animation if it was stopped or if it has changed
         if (!stopped && current_anim_name == anim_name)
