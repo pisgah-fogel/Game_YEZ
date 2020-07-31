@@ -78,11 +78,12 @@ namespace gui
 			//sf::Texture *tex = core::RessourcesManager::getInstance()->getTexture(0);
 
 			userCharacter = new Character(200);
-			userCharacter->register_anim("up", {0, 1, 2});
-			userCharacter->register_anim("left", {3, 4, 5});
-			userCharacter->register_anim("right", {6, 7, 8});
-			userCharacter->register_anim("down", {9, 10, 11});
+			userCharacter->register_anim("up", {1, 2, 0});
+			userCharacter->register_anim("left", {4, 5, 3});
+			userCharacter->register_anim("right", {7, 8, 6});
+			userCharacter->register_anim("down", {10, 11, 9});
 			userCharacter->stop_anim();
+			userCharacter->static_anim(0);
 
 			sprite1 = core::RessourcesManager::getInstance()->createSprite(0);
 			sprite2 = core::RessourcesManager::getInstance()->createSprite(1);
@@ -106,23 +107,25 @@ namespace gui
 
 			// Move character
 			float sec = dt.asSeconds();
-			if (forward_pressed && !backward_pressed) {
+			// only accept one key stoke
+			if (forward_pressed && !backward_pressed && !left_pressed && !right_pressed) {
 				userCharacter->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
 				userCharacter->play_anim("down");
 			}
-			else if (backward_pressed) {
+			else if (backward_pressed && !forward_pressed && !left_pressed && !right_pressed) {
 				userCharacter->move(sf::Vector2f(0.f, SPEED_WALK*sec));
 				userCharacter->play_anim("up");
 			}
-			
-			if (left_pressed && !right_pressed) {
+			else if (!forward_pressed && !backward_pressed && left_pressed && !right_pressed) {
 				userCharacter->move(sf::Vector2f(-SPEED_WALK*sec, 0.f));
 				userCharacter->play_anim("left");
 			}
-			else if (right_pressed){
+			else if (!forward_pressed && !backward_pressed && !left_pressed && right_pressed){
 				userCharacter->move(sf::Vector2f(SPEED_WALK*sec, 0.f));
 				userCharacter->play_anim("right");
 			}
+			else
+				userCharacter->stop_anim();
 		}
 		virtual bool handleEvent(sf::Event& event)
 		{
