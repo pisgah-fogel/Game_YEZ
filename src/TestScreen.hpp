@@ -67,7 +67,7 @@ namespace gui
 			userCharacter->register_anim("down", {10, 11, 9});
 			userCharacter->stop_anim();
 			userCharacter->static_anim(0);
-			userCharacter->setPosition(sf::Vector2f(20.f, 20.f));
+			userCharacter->set_tile_position(sf::Vector2i(2, 2));
 
 			sprite1 = core::RessourcesManager::getInstance()->createSprite(0);
 			sprite2 = core::RessourcesManager::getInstance()->createSprite(1);
@@ -78,76 +78,6 @@ namespace gui
 			sprite2->setPosition(sf::Vector2f(60.f, 50.f));
 			sprite3->setPosition(sf::Vector2f(120.f, 50.f));
 			sprite4->setPosition(sf::Vector2f(60.f, 110.f));
-			
-			//sprite1->move(sf::Vector2f(5.f, 10.f));
-			//sprite1->setOrigin(sf::Vector2f(25.f, 25.f));
-			//sf::Vector2f position = sprite1.getPosition();
-		}
-
-		// this function update coll_right, coll_left, coll_up, coll_down
-		void character_tile_collision(float dt_f) {
-			sf::FloatRect c = userCharacter->get_collision();
-			if (((int)c.top) % 16 < dt_f) { // We are going to hit a tile (up)
-				int tile_y_coor = ((int)c.top)/16 - 1; // collide with the bloc on top of the character
-				
-				int tile_x_coor_1 = ((int)c.left)/16; // column of the colllision
-
-				int tile_x_coor_2 = tile_x_coor_1;
-				if (((int)c.left)%16 + (int)c.width > 16) // also collide with the adjacent tile
-					tile_x_coor_2++;
-				
-				if (tile_x_coor_1 < 6 && tile_y_coor < 6) {
-					if (testLevel_objects[6*tile_y_coor + tile_x_coor_1] == 32)
-						LOG("Test Chest up");
-					else if (testLevel_objects[6*tile_y_coor + tile_x_coor_2] == 32)
-						LOG("Test Chest up");
-				}
-
-				//LOG("Test User will collision up");
-				//LOG("Test User collision: left:%f top:%f width:%f height:%f", c.left, c.top, c.width, c.height);
-				//LOG("Test Collide with x:%d y:%d", tile_x_coor_1, tile_y_coor);
-				//LOG("Test and with x:%d y:%d", tile_x_coor_2, tile_y_coor);
-
-			}
-			else if(((int)c.top+(int)c.height) % 16 < dt_f) { // We are going to hit a tile (down)
-				int tile_y_coor = ((int)c.top)/16 + 1;
-
-				int tile_x_coor_1 = ((int)c.left)/16;
-
-				int tile_x_coor_2 = tile_x_coor_1;
-				if (((int)c.left)%16 + (int)c.width > 16) // also collide with the adjacent tile
-					tile_x_coor_2++;
-				
-				if (tile_x_coor_1 < 6 && tile_y_coor < 6) {
-					if (testLevel_objects[6*tile_y_coor + tile_x_coor_1] == 32)
-						LOG("Test Chest down");
-					else if (testLevel_objects[6*tile_y_coor + tile_x_coor_2] == 32)
-						LOG("Test Chest down");
-				}
-			}
-		}
-
-		void get_character_tiles() {
-			sf::FloatRect c = userCharacter->get_collision();
-			std::vector<std::pair<int, int>> pos;
-			int base_x = ((int)c.left)/16;
-			int base_y = ((int)c.top)/16;
-			/*
-			pos.push_back({base_x, base_y});
-
-			if(((int)c.left)%16 + (int)c.width > 16) {
-				pos.push_back({base_x+1, base_y});
-				if(((int)c.top)%16 + (int)c.height > 16) {
-					pos.push_back({base_x+1, base_y+1});
-				}
-			}
-			else if(((int)c.top)%16 + (int)c.height > 16) {
-				pos.push_back({base_x, base_y+1});
-			}*/
-
-			LOG("Test Character positions:");
-			for (auto it = pos.begin(); it!=pos.end(); it++)
-				LOG("    x:%d y%d", it->first, it->second);
 		}
 
 		virtual void preCompute(sf::Time &dt)
@@ -156,30 +86,27 @@ namespace gui
 
 			userCharacter->update(dt);
 
-			// Move character
-			float sec = dt.asSeconds();
-
-			character_tile_collision(SPEED_WALK*sec);
-
 			// only accept one key stoke
-			if (forward_pressed && !backward_pressed && !left_pressed && !right_pressed) {
-				userCharacter->move(sf::Vector2f(0.f, -SPEED_WALK*sec));
-				userCharacter->play_anim("down");
+			if (! userCharacter->isMoving()) {
+				if (forward_pressed && !backward_pressed && !left_pressed && !right_pressed) {
+					userCharacter->move_tile(sf::Vector2i(0, -1));
+					userCharacter->play_anim("down");
+				}
+				else if (backward_pressed && !forward_pressed && !left_pressed && !right_pressed) {
+					userCharacter->move_tile(sf::Vector2i(0, 1));
+					userCharacter->play_anim("up");
+				}
+				else if (!forward_pressed && !backward_pressed && left_pressed && !right_pressed) {
+					userCharacter->move_tile(sf::Vector2i(-1, 0));
+					userCharacter->play_anim("left");
+				}
+				else if (!forward_pressed && !backward_pressed && !left_pressed && right_pressed){
+					userCharacter->move_tile(sf::Vector2i(1, 0));
+					userCharacter->play_anim("right");
+				}
+				else
+					userCharacter->stop_anim();
 			}
-			else if (backward_pressed && !forward_pressed && !left_pressed && !right_pressed) {
-				userCharacter->move(sf::Vector2f(0.f, SPEED_WALK*sec));
-				userCharacter->play_anim("up");
-			}
-			else if (!forward_pressed && !backward_pressed && left_pressed && !right_pressed) {
-				userCharacter->move(sf::Vector2f(-SPEED_WALK*sec, 0.f));
-				userCharacter->play_anim("left");
-			}
-			else if (!forward_pressed && !backward_pressed && !left_pressed && right_pressed){
-				userCharacter->move(sf::Vector2f(SPEED_WALK*sec, 0.f));
-				userCharacter->play_anim("right");
-			}
-			else
-				userCharacter->stop_anim();
 		}
 		virtual bool handleEvent(sf::Event& event)
 		{
