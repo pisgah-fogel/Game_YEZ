@@ -137,6 +137,10 @@ class Character: public sf::Drawable, public sf::Transformable
 			stopped = false;
 		}
 
+		sf::Vector2i getFutureTilePosition(sf::Vector2i moveVector) {
+			return tile_position + moveVector;
+		}
+
 		sf::Vector2f tilePositionToPixelPosition(sf::Vector2i vec) {
 			return sf::Vector2f(vec.x*16.f, vec.y*16.f);
 		}

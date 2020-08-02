@@ -80,6 +80,26 @@ namespace gui
 			sprite4->setPosition(sf::Vector2f(60.f, 110.f));
 		}
 
+
+		bool collision_before_moving(sf::Vector2i moveVector) {
+			sf::Vector2i v = userCharacter->getFutureTilePosition(moveVector);
+			if (v.x < 0 || v.x > 6 || v.y < 0 || v.y > 6) {
+				LOG("Error future user position is incorrect");
+				return true; // If an error occurs, the user can't move
+			}
+			unsigned int item = testLevel_objects[v.x + v.y*6];
+			switch (item) {
+				case 32: // Openned Chest
+					LOG("Test Going to interract with openned chest");
+					return true;
+				case 34: // Closed Chest
+					LOG("Test Going to interract with closed chest");
+					return true;
+				default:
+					return false;
+			}
+		}
+
 		virtual void preCompute(sf::Time &dt)
 		{
 			testAnim->update(dt);
@@ -89,20 +109,28 @@ namespace gui
 			// only accept one key stoke
 			if (! userCharacter->isMoving()) {
 				if (forward_pressed && !backward_pressed && !left_pressed && !right_pressed) {
-					userCharacter->move_tile(sf::Vector2i(0, -1));
-					userCharacter->play_anim("down");
+					if (! collision_before_moving(sf::Vector2i(0, -1))) {
+						userCharacter->move_tile(sf::Vector2i(0, -1));
+						userCharacter->play_anim("down");
+					}
 				}
 				else if (backward_pressed && !forward_pressed && !left_pressed && !right_pressed) {
-					userCharacter->move_tile(sf::Vector2i(0, 1));
-					userCharacter->play_anim("up");
+					if (! collision_before_moving(sf::Vector2i(0, 1))) {
+						userCharacter->move_tile(sf::Vector2i(0, 1));
+						userCharacter->play_anim("up");
+					}
 				}
 				else if (!forward_pressed && !backward_pressed && left_pressed && !right_pressed) {
-					userCharacter->move_tile(sf::Vector2i(-1, 0));
-					userCharacter->play_anim("left");
+					if (! collision_before_moving(sf::Vector2i(-1, 0))) {
+						userCharacter->move_tile(sf::Vector2i(-1, 0));
+						userCharacter->play_anim("left");
+					}
 				}
 				else if (!forward_pressed && !backward_pressed && !left_pressed && right_pressed){
-					userCharacter->move_tile(sf::Vector2i(1, 0));
-					userCharacter->play_anim("right");
+					if (! collision_before_moving(sf::Vector2i(1, 0))) {
+						userCharacter->move_tile(sf::Vector2i(1, 0));
+						userCharacter->play_anim("right");
+					}
 				}
 			}
 		}
