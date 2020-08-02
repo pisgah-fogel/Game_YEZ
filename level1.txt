@@ -1,0 +1,4 @@
+# YEZ version Aug  2 2020, saved on the 02-08-2020 17:47:53
+# tile_sprite_id object_sprite_id collision chest_id distributor_id dps door_destitnation
+i 2 33 0 0 0 0 0
+i 3 33 0 0 0 0 0
