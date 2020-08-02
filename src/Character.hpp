@@ -41,13 +41,25 @@ class Character: public sf::Drawable, public sf::Transformable
 					current_anim_vector_it = current_anim_vector.begin();
 				if(needToMove) {
 					float sec = dt.asSeconds();
-					sf::Vector2f t = sf::Vector2f(tile_target_diff.x*260*sec,tile_target_diff.y*260*sec);
-					this->move(t);
-					if (abs(this->getPosition().x - target_position.x) < 1.f && abs(this->getPosition().y - target_position.y) < 1.f) {
-						LOG("Test In TILE %f %f, -> %f %f",this->getPosition().x, this->getPosition().y, target_position.x, target_position.y);
-						tile_position = tile_target_position;
+					sf::Vector2f t; // = sf::Vector2f(,tile_target_diff.y*460*sec);
+					bool tmp = false;
+					if (abs(remaining_px_to_move.x) > 1.5) {
+						t.x = copysignf(1.0, remaining_px_to_move.x)*460*sec;
+						remaining_px_to_move.x -= t.x;
+						tmp = true;
+					}
+					if (abs(remaining_px_to_move.y) > 1.5) {
+						t.y = copysignf(1.0, remaining_px_to_move.y)*460*sec;
+						remaining_px_to_move.y -= t.y;
+						tmp = true;
+					}
+					if (tmp) {
+						this->move(t);
+					}
+					else {
 						needToMove = false;
-						stopped = true;
+						tile_position = tile_target_position;
+						stop_anim();
 					}
 				}
 			}
@@ -108,18 +120,18 @@ class Character: public sf::Drawable, public sf::Transformable
 
 		void set_tile_position(sf::Vector2i vec) {
 			tile_position = vec;
-			target_position = tilePositionToPixelPosition(tile_position);
-			this->setPosition(target_position);
-			tile_target_diff = sf::Vector2i(0, 0);
+			sf::Vector2f pixel_position = tilePositionToPixelPosition(tile_position);
+			this->setPosition(pixel_position);
+			remaining_px_to_move = sf::Vector2f(0.f, 0.f);
 			needToMove = false;
 		}
 
 		void move_tile(sf::Vector2i vec) {
-			tile_target_diff = vec;
 			tile_target_position = vec + tile_position;
-			target_position = tilePositionToPixelPosition(tile_target_position);
+			sf::Vector2f target_pixel_position = tilePositionToPixelPosition(tile_target_position);
+			remaining_px_to_move = sf::Vector2f(target_pixel_position.x - getPosition().x, target_pixel_position.y - getPosition().y);
 			needToMove = true;
-			stopped = true;
+			stopped = false;
 		}
 
 		sf::Vector2f tilePositionToPixelPosition(sf::Vector2i vec) {
@@ -143,10 +155,9 @@ class Character: public sf::Drawable, public sf::Transformable
 		std::vector<size_t>::iterator current_anim_vector_it;
 
 		sf::Vector2i tile_position;
-		sf::Vector2i tile_target_diff;
 		sf::Vector2i tile_target_position;
+		sf::Vector2f remaining_px_to_move;
 		bool needToMove;
-		sf::Vector2f target_position;
 
 		std::vector<sf::IntRect>* u_rects;
 		float u_usec, refreshrate;

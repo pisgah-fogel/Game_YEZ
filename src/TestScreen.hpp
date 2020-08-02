@@ -104,8 +104,6 @@ namespace gui
 					userCharacter->move_tile(sf::Vector2i(1, 0));
 					userCharacter->play_anim("right");
 				}
-				else
-					userCharacter->stop_anim();
 			}
 		}
 		virtual bool handleEvent(sf::Event& event)
