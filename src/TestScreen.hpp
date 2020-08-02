@@ -67,7 +67,7 @@ namespace gui
 			userCharacter->register_anim("down", {10, 11, 9});
 			userCharacter->stop_anim();
 			userCharacter->static_anim(0);
-			userCharacter->set_tile_position(sf::Vector2i(2, 2));
+			userCharacter->set_tile_position(sf::Vector2i(0, 3));
 
 			sprite1 = core::RessourcesManager::getInstance()->createSprite(0);
 			sprite2 = core::RessourcesManager::getInstance()->createSprite(1);
@@ -111,8 +111,9 @@ namespace gui
 
             if (event.type == sf::Event::Closed)
 				return false; // exit
-			else if (event.type == sf::Event::MouseButtonPressed)
-				testAnim->next();
+			else if (event.type == sf::Event::MouseButtonPressed) {
+				LOG("Debug Mouse Button Pressed");
+			}
 			else if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) {
 					return false; // exit
@@ -197,7 +198,7 @@ namespace gui
 			{
 				33, 33, 33, 33, 33, 33,
 				33, 33, 33, 33, 33, 33,
-				33, 33, 32, 33, 33, 33,
+				33, 33, 34, 32, 33, 33,
 				33, 33, 33, 33, 33, 33,
 				32, 33, 33, 33, 33, 33,
 				33, 33, 33, 33, 33, 33,

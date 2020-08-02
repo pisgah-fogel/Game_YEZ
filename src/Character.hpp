@@ -14,7 +14,7 @@ class Character: public sf::Drawable, public sf::Transformable
 			refreshrate = 0.1f;
 			u_rects = core::RessourcesManager::getInstance()->getRectSet(id);
 			sf::Texture* tex = core::RessourcesManager::getInstance()->getTexture(id/100);
-			if (u_rects == nullptr || tex == nullptr) {
+			if (u_rects == nullptr || tex == nullptr || u_rects->size() == 0) {
 				LOG("Error can't found texture");
 				u_visible = false;
 			}
@@ -35,7 +35,10 @@ class Character: public sf::Drawable, public sf::Transformable
 			u_usec += dt.asSeconds();
 			if (!stopped && u_usec > refreshrate) {
 				u_usec = 0.f;
-				u_sprite->setTextureRect((*u_rects)[*current_anim_vector_it]);
+				if (*current_anim_vector_it < u_rects->size())
+					u_sprite->setTextureRect((*u_rects)[*current_anim_vector_it]);
+				else
+					LOG("Error cannot find texture %d for character", current_anim_vector_it);
 				current_anim_vector_it ++;
 				if (current_anim_vector_it == current_anim_vector.end())
 					current_anim_vector_it = current_anim_vector.begin();
@@ -115,7 +118,7 @@ class Character: public sf::Drawable, public sf::Transformable
 			current_anim_name = anim_name;
 			animations[anim_name] = anim;
 			current_anim_vector = anim;
-			current_anim_vector_it = anim.begin();
+			current_anim_vector_it = current_anim_vector.begin();
 		}
 
 		void set_tile_position(sf::Vector2i vec) {
